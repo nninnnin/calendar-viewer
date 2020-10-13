@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import renderSchedules from '../../utils/renderSchedules';
 import * as Styled from '../styled';
 
-export default function Weekly ({ week, scheduleDatas, updateTimespan }) {
+export default function Weekly ({ week, scheduleDatas, updateTimespan, setCurrSchedule }) {
   useEffect(() => {
     updateTimespan('weekly');
-  }, []);
+  }, [updateTimespan]);
 
   function renderDayline () {
     const days = ['월', '화', '수', '목', '금', '토', '일'];
@@ -39,7 +39,7 @@ export default function Weekly ({ week, scheduleDatas, updateTimespan }) {
 
       return (
         <div className='daily' key={date}>
-          {schedules[scheduleDate] && renderSchedules(schedules, scheduleDate, true)}
+          {schedules[scheduleDate] && renderSchedules(schedules, scheduleDate, true, setCurrSchedule)}
         </div>
       );
     });

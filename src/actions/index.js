@@ -17,26 +17,33 @@ export const setTimespanAction = (timespan) => {
   };
 };
 
-export const incrementDateAction = () => {
+export const incrementDate = () => {
   return {
     type: types.INCREMENT_DATE
   };
 };
 
-export const decrementDateAction = () => {
+export const decrementDate = () => {
   return {
     type: types.DECREMENT_DATE
   };
 };
 
-export const incrementWeekAction = () => {
+export const incrementWeek = () => {
   return {
     type: types.INCREMENT_WEEK
   };
 };
 
-export const decrementWeekAction = () => {
+export const decrementWeek = () => {
   return {
     type: types.DECREMENT_WEEK
   };
 };
+
+export const setCurrSchedule = (id) => {
+  return {
+    type: types.SET_CURR_SCHEDULE,
+    id
+  }
+}

@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import renderSchedules from '../../utils/renderSchedules';
 import * as Styled from '../styled';
 
-export default function Daily ({ date, scheduleDatas, updateTimespan }) {
+export default function Daily ({ date, scheduleDatas, updateTimespan, setCurrSchedule }) {
   useEffect(() => {
     updateTimespan('daily');
-  }, []);
+  }, [updateTimespan]);
 
   function renderTimelines () {
     let timelines = [];
@@ -28,7 +28,7 @@ export default function Daily ({ date, scheduleDatas, updateTimespan }) {
         {renderTimelines()}
       </div>
       <div className='schedules'>
-        {renderSchedules(scheduleDatas, date)}
+        {renderSchedules(scheduleDatas, date, false, setCurrSchedule)}
       </div>
     </Styled.Daily>
   );

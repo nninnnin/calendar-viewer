@@ -1,5 +1,4 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import * as Styled from '../styled';
 
 export default function Modal () {

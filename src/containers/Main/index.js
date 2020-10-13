@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { bindActionCreators } from 'redux';
 import { Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Daily from '../../components/Daily';
@@ -8,11 +9,13 @@ import { schedule } from '../../utils/api';
 import {
   receiveSchedules,
   setTimespanAction,
-  incrementDateAction,
-  decrementDateAction,
-  incrementWeekAction,
-  decrementWeekAction } from '../../actions';
+  incrementDate,
+  decrementDate,
+  incrementWeek,
+  decrementWeek,
+  setCurrSchedule } from '../../actions';
 import * as Styled from '../../components/styled';
+import { getAllSchedules } from '../../reducers/schedules';
 
 function Main ({
   onLoad,
@@ -24,7 +27,8 @@ function Main ({
   decrementDate,
   week,
   incrementWeek,
-  decrementWeek }) {
+  decrementWeek,
+  setCurrSchedule }) {
 
   useEffect(() => {
     onLoad();
@@ -37,16 +41,22 @@ function Main ({
         break;
       case 'weekly':
         incrementWeek();
+        break;
+      default:
+        return;
     }
   }
 
-  function handlePrevClick (e) {
+  function handlePrevClick(e) {
     switch (timespan) {
       case 'daily':
         decrementDate();
         break;
       case 'weekly':
         decrementWeek();
+        break;
+      default:
+        return;
     }
   }
 
@@ -75,15 +85,17 @@ function Main ({
         <Route path='/main/daily/'>
           <Daily
             date={date}
-            scheduleDatas={schedules.byId}
-            updateTimespan={v => setTimespan(v)}
+            scheduleDatas={schedules}
+            updateCurrSchedule={setCurrSchedule}
+            updateTimespan={setTimespan}
           />
         </Route>
         <Route path='/main/weekly/'>
           <Weekly
             week={week}
-            scheduleDatas={schedules.byId}
-            updateTimespan={v => setTimespan(v)}
+            scheduleDatas={schedules}
+            updateCurrSchedule={setCurrSchedule}
+            updateTimespan={setTimespan}
           />
         </Route>
         <Route path='/main/:timespan/:scheduleId'>
@@ -94,12 +106,12 @@ function Main ({
   );
 }
 
-const mapStateToProps = ({ utils: { week, date }, schedules }) => {
+const mapStateToProps = ({ utils: { week, date, timespan }, schedules }) => {
   return {
     week,
     date,
     timespan,
-    schedules
+    schedules: getAllSchedules(schedules)
   }
 };
 
@@ -108,21 +120,16 @@ const mapDispatchToProps = (dispatch) => {
     onLoad () {
       schedule.getSchedules(schedules => dispatch(receiveSchedules(schedules)));
     },
-    setTimespan(timespan){
+    setTimespan (timespan) {
       dispatch(setTimespanAction(timespan));
     },
-    incrementDate () {
-      dispatch(incrementDateAction());
-    },
-    decrementDate () {
-      dispatch(decrementDateAction());
-    },
-    incrementWeek () {
-      dispatch(incrementWeekAction());
-    },
-    decrementWeek () {
-      dispatch(decrementWeekAction());
-    }
+    ...bindActionCreators({
+      incrementDate,
+      decrementDate,
+      incrementWeek,
+      decrementWeek,
+      setCurrSchedule
+    }, dispatch),
   };
 };
 
